@@ -5,21 +5,21 @@
 class Distill < Formula
   desc "Turn Claude Code session transcripts into a curated model of you"
   homepage "https://github.com/msmedes/distill"
-  version "0.2.1"
+  version "0.2.2"
   license "MIT"
 
   on_macos do
     if Hardware::CPU.intel?
-      url "https://github.com/msmedes/distill/releases/download/v0.2.1/distill_0.2.1_darwin_x86_64.tar.gz"
-      sha256 "b2a1c305868e488b68a811b343e53871f288f2000438f3b0d099b2a089bad16e"
+      url "https://github.com/msmedes/distill/releases/download/v0.2.2/distill_0.2.2_darwin_x86_64.tar.gz"
+      sha256 "a37e47a8ae9c755e1c5d279aca9a47a4e12a59ef82b509aa2631332ba61d8623"
 
       define_method(:install) do
         bin.install "distill"
       end
     end
     if Hardware::CPU.arm?
-      url "https://github.com/msmedes/distill/releases/download/v0.2.1/distill_0.2.1_darwin_arm64.tar.gz"
-      sha256 "1cbbd90fc03722bcbe1449a009cbc04ea640168042bd232421b8b50cfa85bab8"
+      url "https://github.com/msmedes/distill/releases/download/v0.2.2/distill_0.2.2_darwin_arm64.tar.gz"
+      sha256 "af11ba705dbbae67f336b1f406f037a3d8e737e3400d936e994196d96f8ad196"
 
       define_method(:install) do
         bin.install "distill"
@@ -29,15 +29,15 @@ class Distill < Formula
 
   on_linux do
     if Hardware::CPU.intel? && Hardware::CPU.is_64_bit?
-      url "https://github.com/msmedes/distill/releases/download/v0.2.1/distill_0.2.1_linux_x86_64.tar.gz"
-      sha256 "5d91cf7a76a699092b94c066afa7000297fb21f6f4d5959a3fac6414ccaccdf7"
+      url "https://github.com/msmedes/distill/releases/download/v0.2.2/distill_0.2.2_linux_x86_64.tar.gz"
+      sha256 "4ddf319f90f193cc66bb8bf6b65e44e761653eb0ff38dcc0fba74ea0781abf83"
       define_method(:install) do
         bin.install "distill"
       end
     end
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-      url "https://github.com/msmedes/distill/releases/download/v0.2.1/distill_0.2.1_linux_arm64.tar.gz"
-      sha256 "db59028d6b39cb89faefb9b263291f1274556a58c8894d0e04aa89122db7f39d"
+      url "https://github.com/msmedes/distill/releases/download/v0.2.2/distill_0.2.2_linux_arm64.tar.gz"
+      sha256 "605e34a585031940f2d18470801cf95e50de0202232138d5fb2909e0a1cda09f"
       define_method(:install) do
         bin.install "distill"
       end
@@ -51,12 +51,24 @@ class Distill < Formula
 
         https://docs.claude.com/en/docs/claude-code
 
-      To auto-extract on every session end (optional, recommended):
+      To configure distill:
 
         distill install
 
+      To run the watcher automatically with Homebrew:
+
+        brew services start distill
+
       Your local state lives at ~/.distill/.
     EOS
+  end
+
+  service do
+    run [opt_bin/"distill", "watch"]
+    keep_alive true
+    run_at_load true
+    log_path var/"log/distill.log"
+    error_log_path var/"log/distill.log"
   end
 
   test do
