@@ -5,21 +5,21 @@
 class Distill < Formula
   desc "Turn Claude Code session transcripts into a curated model of you"
   homepage "https://github.com/msmedes/distill"
-  version "0.2.4"
+  version "0.2.5"
   license "MIT"
 
   on_macos do
     if Hardware::CPU.intel?
-      url "https://github.com/msmedes/distill/releases/download/v0.2.4/distill_0.2.4_darwin_x86_64.tar.gz"
-      sha256 "ad8a7b6f64cea097c7ea1426896138429db21f09612c77e72ffc9c35e232641e"
+      url "https://github.com/msmedes/distill/releases/download/v0.2.5/distill_0.2.5_darwin_x86_64.tar.gz"
+      sha256 "d5749bd4c429a5e75e63ce9c2abbdfdf8107d960a832bcd3962093c798304a43"
 
       define_method(:install) do
         bin.install "distill"
       end
     end
     if Hardware::CPU.arm?
-      url "https://github.com/msmedes/distill/releases/download/v0.2.4/distill_0.2.4_darwin_arm64.tar.gz"
-      sha256 "0d0d4b5a10f3336df2bad91e838d7bb19c05dd8adb0ec3453daf053f1034fcca"
+      url "https://github.com/msmedes/distill/releases/download/v0.2.5/distill_0.2.5_darwin_arm64.tar.gz"
+      sha256 "2a2bfb71d506c25d50a6002f3aedac9eb0feaef4cd2f61dcf241bfac8821bded"
 
       define_method(:install) do
         bin.install "distill"
@@ -29,15 +29,15 @@ class Distill < Formula
 
   on_linux do
     if Hardware::CPU.intel? && Hardware::CPU.is_64_bit?
-      url "https://github.com/msmedes/distill/releases/download/v0.2.4/distill_0.2.4_linux_x86_64.tar.gz"
-      sha256 "46a4eac7d79e6a8f300d30628a674d1d565c8bdc41e779ac4df5a51a5afa4e3b"
+      url "https://github.com/msmedes/distill/releases/download/v0.2.5/distill_0.2.5_linux_x86_64.tar.gz"
+      sha256 "d7fcac672432e3f5f738be9646bca43a5460a8c5ef51dfd02151e6c2e919611f"
       define_method(:install) do
         bin.install "distill"
       end
     end
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-      url "https://github.com/msmedes/distill/releases/download/v0.2.4/distill_0.2.4_linux_arm64.tar.gz"
-      sha256 "dfd69023fe2dcaa4ab92e8c83f267c4d19e54001b6aa0422113a74f4b4e68f9b"
+      url "https://github.com/msmedes/distill/releases/download/v0.2.5/distill_0.2.5_linux_arm64.tar.gz"
+      sha256 "f9646f9eb52cb7b4557e596215d02e1cac3d85cf6fbb6d83cdbfe1edb62af1fd"
       define_method(:install) do
         bin.install "distill"
       end
@@ -45,8 +45,16 @@ class Distill < Formula
   end
 
   def post_install
-    if `brew services list 2>/dev/null`.match?(/^(msmedes\/distill\/)?distill\s+started/)
-      system "brew", "services", "restart", "msmedes/distill/distill"
+    # Restart the watcher only if it was already running, so upgrades pick
+    # up the new binary. Using `launchctl kickstart` (not `brew services
+    # restart`) avoids the plist-write permission error you hit when
+    # brew-from-brew tries to rewrite the LaunchAgent during an upgrade.
+    if OS.mac? && `brew services list 2>/dev/null`.match?(/^(msmedes\/distill\/)?distill\s+started/)
+      label = "homebrew.mxcl.distill"
+      plist = "#{Dir.home}/Library/LaunchAgents/#{label}.plist"
+      if File.exist?(plist)
+        system "launchctl", "kickstart", "-k", "gui/#{Process.uid}/#{label}"
+      end
     end
   end
 
