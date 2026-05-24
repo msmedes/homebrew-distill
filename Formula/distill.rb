@@ -5,21 +5,21 @@
 class Distill < Formula
   desc "Turn Claude Code session transcripts into a curated model of you"
   homepage "https://github.com/msmedes/distill"
-  version "0.2.5"
+  version "0.2.6"
   license "MIT"
 
   on_macos do
     if Hardware::CPU.intel?
-      url "https://github.com/msmedes/distill/releases/download/v0.2.5/distill_0.2.5_darwin_x86_64.tar.gz"
-      sha256 "d5749bd4c429a5e75e63ce9c2abbdfdf8107d960a832bcd3962093c798304a43"
+      url "https://github.com/msmedes/distill/releases/download/v0.2.6/distill_0.2.6_darwin_x86_64.tar.gz"
+      sha256 "c07162fc4ec837b2da4d47a88bc3718580a8d3f6b87e92ef787f7c6fc43687f0"
 
       define_method(:install) do
         bin.install "distill"
       end
     end
     if Hardware::CPU.arm?
-      url "https://github.com/msmedes/distill/releases/download/v0.2.5/distill_0.2.5_darwin_arm64.tar.gz"
-      sha256 "2a2bfb71d506c25d50a6002f3aedac9eb0feaef4cd2f61dcf241bfac8821bded"
+      url "https://github.com/msmedes/distill/releases/download/v0.2.6/distill_0.2.6_darwin_arm64.tar.gz"
+      sha256 "24310f291d4fc8b645cfb557993b59f9dcf01e1fb45695749020891ff20633fb"
 
       define_method(:install) do
         bin.install "distill"
@@ -29,15 +29,15 @@ class Distill < Formula
 
   on_linux do
     if Hardware::CPU.intel? && Hardware::CPU.is_64_bit?
-      url "https://github.com/msmedes/distill/releases/download/v0.2.5/distill_0.2.5_linux_x86_64.tar.gz"
-      sha256 "d7fcac672432e3f5f738be9646bca43a5460a8c5ef51dfd02151e6c2e919611f"
+      url "https://github.com/msmedes/distill/releases/download/v0.2.6/distill_0.2.6_linux_x86_64.tar.gz"
+      sha256 "4609e179ac0f1c244d4dfcb702e4494fbe50f8697d24ce36ef51026a456a3335"
       define_method(:install) do
         bin.install "distill"
       end
     end
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-      url "https://github.com/msmedes/distill/releases/download/v0.2.5/distill_0.2.5_linux_arm64.tar.gz"
-      sha256 "f9646f9eb52cb7b4557e596215d02e1cac3d85cf6fbb6d83cdbfe1edb62af1fd"
+      url "https://github.com/msmedes/distill/releases/download/v0.2.6/distill_0.2.6_linux_arm64.tar.gz"
+      sha256 "bf27901af45aca13fbb582b10b80e38781c18f58c34c5ed5ccf2ca3710d4b05c"
       define_method(:install) do
         bin.install "distill"
       end
